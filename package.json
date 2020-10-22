@@ -1,0 +1,19 @@
+{
+  "name": "coursework1",
+  "version": "1.0.0",
+  "description": "University group coursework for Internet Technologies CW1",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "author": "Fraser Fewster, Geoffroy Causard, Christopher Galbraith, Kirsty Minto",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.18.2",
+    "mongoose": "^5.10.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
