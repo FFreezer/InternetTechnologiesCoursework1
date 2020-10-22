@@ -25,6 +25,25 @@ module.exports = {
     },
     
     Mutation : {
+        async addSale(parent, {
+            inputSale : { items, storeLocation, couponUsed, purchasedMethod, customer}
+        }, context, info){
+            // addSale function body start
+            const newSale = new Sale({
+                storeLocation : storeLocation,
+                couponUsed: couponUsed,
+                purchasedMethod: purchasedMethod,
+                customer: customer,
+                items: items,
+                saleDate : new Date().toISOString()
+            });
 
+            const result = await newSale.save();
+            console.log(result);
+            return {
+                ...result._doc
+            }
+            // addSale function body end
+        }
     }
 }
