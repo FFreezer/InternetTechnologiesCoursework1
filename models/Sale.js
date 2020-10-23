@@ -4,14 +4,19 @@ const saleSchema = new Schema({
     saleDate: String,
     items: [
         {
+            _id: false,
             name: String,
             tags: [String],
-            price: Schema.Types.Decimal128,
+            price: {
+                type : Schema.Types.Decimal128,
+                transform : v => v.toString()
+            },
             quantity: Schema.Types.Number
         }
     ],
     storeLocation: String,
     customer: {
+        _id: false,
         gender: String,
         age: Schema.Types.Number,
         email: String,
@@ -20,7 +25,6 @@ const saleSchema = new Schema({
     couponUsed: Boolean,
     purchaseMethod: String,
 });
-
 
 
 module.exports = model("Sale", saleSchema);

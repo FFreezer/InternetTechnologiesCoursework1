@@ -5,7 +5,8 @@ module.exports = {
         async getAllSales() {
             try{
                 const sales = await Sale.find();
-                return sales;
+                const sales_json = sales.map(element => element.toJSON());
+                return sales_json;
             }catch(err){
                 throw new Error(err);
             }
@@ -14,9 +15,8 @@ module.exports = {
         async getSaleById(parent, { id: id_to_search }, context, info){
             try{
                 const sale = await Sale.findOne({ _id: id_to_search });
-                console.log(sale._doc.items);
                 return {
-                    ...sale._doc,
+                    ...sale.toJSON(),
                 }
             }catch(err){
                 throw new Error(err);
@@ -39,9 +39,8 @@ module.exports = {
             });
 
             const result = await newSale.save();
-            console.log(result);
             return {
-                ...result._doc
+                ...result.toJSON()
             }
             // addSale function body end
         }
