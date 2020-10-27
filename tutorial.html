@@ -1,0 +1,82 @@
+<h3>Create Project</h3>
+<pre>
+    <strong>
+        <span>$: mkdir my_app</span>
+    </strong>
+</pre>
+
+<h5>Create package.json</h5>
+<pre>
+    <strong>$: npm init -y</strong>
+</pre>
+
+<h5>Install apollo-server-express &amp; mongoose</h5>
+<pre>
+    <strong>$: npm install apollo-server-express mongoose</strong>
+</pre>
+
+<h5>Install nodemon</h5>
+<pre>
+    <strong>$: npm install nodemon --save-dev</strong>
+</pre>
+
+<h5>Create project files</h5>
+<strong>
+    <pre>
+        $: touch server.js
+        $: mkdir graphql model
+        $: cd graphql
+        $: mkdir resolvers
+        $: touch typeDefs.js
+        $: cd resolvers
+        $: touch index.js
+        $: touch sales.js
+        $: cd ..
+        $: cd ..
+        $: cd model
+        $: touch User.js
+    </pre>
+</strong>
+
+<h5>Development startup script</h5>
+<p>Add the following key value to your script section of your package.json</p>
+<pre>
+    <strong>“dev” : “nodemon server.js”</strong>
+</pre>
+<p>It should now look like the following</p>
+<pre>
+    <strong>
+        &quot;scripts&quot;: {
+            &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;,
+            &quot;dev&quot;: &quot;nodemon server.js&quot; },
+    </strong>
+</pre>
+
+<h3>Create your server - server.js</h3>
+<strong>
+    <pre>
+        const express = require('express');
+        const { ApolloServer , gql } = require('apollo-server-express');
+        const mongoose = require('mongoose');
+        
+        //Enter your actual connection string here
+        const db_con_string = "enter your connection string here"
+        
+        const PORT = process.env.PORT || 8080;
+        const app = express();
+        mongoose.connect(db_con_string, { useNewUrlParser : true })
+            .then(() =&gt; {
+                console.log("MongoDB Connected");
+                return app.listen({ port : PORT })
+            })
+            then((res) =&gt; {
+                console.log(`Application is listening on port ${PORT}. Browse to http://localhost:${PORT}`)
+            })
+            .catch((err) =&gt; {
+                console.log(err)
+            });
+    </pre>
+</strong>
+<p>
+    Now if you run your development script (npm run dev) your server should start. You can navigate to the URL listed in your console (localhost:8080)
+</p>

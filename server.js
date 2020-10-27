@@ -20,7 +20,6 @@ const apollo_server = new ApolloServer({
 const app = express();
 apollo_server.applyMiddleware({ app });
 
-
 mongoose.connect(db_con_string, { useNewUrlParser : true })
     .then(() => {
         console.log("MongoDB Connected");

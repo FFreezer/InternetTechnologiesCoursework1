@@ -10,7 +10,7 @@ module.exports = {
             }catch(err){
                 throw new Error(err);
             }
-        },//End of getAllSales()
+        },
 
         async getSaleById(parent, { id: id_to_search }, context, info){
             try{
