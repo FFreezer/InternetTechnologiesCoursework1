@@ -1,82 +1,127 @@
-<h3>Create Project</h3>
-<pre>
-    <strong>
-        <span>$: mkdir my_app</span>
-    </strong>
-</pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        body {
+            background : rgb(200,200,200);
+            color: #222;
+        }
 
-<h5>Create package.json</h5>
-<pre>
-    <strong>$: npm init -y</strong>
-</pre>
+        h1,h2,h3,h4,h5,h6 {
+            font-family: 'Open Sans', sans-serif;
+        }
+        p {
+            font-family: 'Nunito', sans-serif;
+        }
+        p > span {
+            font-family: monospace;
+            color: rgb(231, 0, 96)
+        }
 
-<h5>Install apollo-server-express &amp; mongoose</h5>
-<pre>
-    <strong>$: npm install apollo-server-express mongoose</strong>
-</pre>
+        a {
+            color: rgb(255, 0, 0);
+        }
 
-<h5>Install nodemon</h5>
-<pre>
-    <strong>$: npm install nodemon --save-dev</strong>
-</pre>
+        .container{
+            width: 70%;
+            margin: auto;
+            background: rgba(240,240,240, 1);
+        }
 
-<h5>Create project files</h5>
-<strong>
-    <pre>
-        $: touch server.js
-        $: mkdir graphql model
-        $: cd graphql
-        $: mkdir resolvers
-        $: touch typeDefs.js
-        $: cd resolvers
-        $: touch index.js
-        $: touch sales.js
-        $: cd ..
-        $: cd ..
-        $: cd model
-        $: touch User.js
-    </pre>
-</strong>
+        .section { 
+            background: rgba(255,255,255,0.05);
+            box-shadow:1px 1px 10px rgba(0,0,0,0.8) ;
+            padding: 0.2rem 1rem;
+            margin: 1rem 0rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h3>Download The Project Files</h3>
+            <p>
+                If you dont have github installed you can download the file as a zip from the github repo. 
+                Otherwise clone <a href="" target="#">this project</a>
+            </p>
+        </div>
 
-<h5>Development startup script</h5>
-<p>Add the following key value to your script section of your package.json</p>
-<pre>
-    <strong>“dev” : “nodemon server.js”</strong>
-</pre>
-<p>It should now look like the following</p>
-<pre>
-    <strong>
-        &quot;scripts&quot;: {
-            &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;,
-            &quot;dev&quot;: &quot;nodemon server.js&quot; },
-    </strong>
-</pre>
-
-<h3>Create your server - server.js</h3>
-<strong>
-    <pre>
-        const express = require('express');
-        const { ApolloServer , gql } = require('apollo-server-express');
-        const mongoose = require('mongoose');
+        <div class="section">
+            <h3>Download Package Files</h3>
+            <p>
+                Navigate using your console to the project directory and <span>run npm install</span> 
+            </p>
+        </div>
         
-        //Enter your actual connection string here
-        const db_con_string = "enter your connection string here"
-        
-        const PORT = process.env.PORT || 8080;
-        const app = express();
-        mongoose.connect(db_con_string, { useNewUrlParser : true })
-            .then(() =&gt; {
-                console.log("MongoDB Connected");
-                return app.listen({ port : PORT })
-            })
-            then((res) =&gt; {
-                console.log(`Application is listening on port ${PORT}. Browse to http://localhost:${PORT}`)
-            })
-            .catch((err) =&gt; {
-                console.log(err)
-            });
-    </pre>
-</strong>
-<p>
-    Now if you run your development script (npm run dev) your server should start. You can navigate to the URL listed in your console (localhost:8080)
-</p>
+        <div class="section">
+            <h3>Database Connection Details</h3>
+            <p>
+                Once you've downloaded the project open your <span>db_config.js</span> file and modify it to use these values
+                <br />
+                <span>const db_username = "tutorialuser";</span> <br />
+                <span>const db_password = "7CQLhe6Bfx6tUCXC";</span> <br />
+                <span>const db_database = "sample_supplies";</span> <br />
+            </p>
+        </div>
+
+        <div class="section">
+            <h3>Test the application</h3>
+            <p>
+                Once you've modified the above values you should be able to run <span>npm run dev</span> and the application will 
+                boot. You should see a message in your console saying <br /> <span>MongoDB Connected <br />Application is listening on port 8080. Browse to http://localhost:8080/graphql</span>
+            </p>
+            <p>
+                Open your browser and navigate to <span>localhost:8080/graphql</span>. A window should load with a panel on the left
+                and a panel on the right. 
+                <br />
+                In the left hand panel copy and paste the following.
+                <br />
+                <span>
+                    query {
+                        getAllSales {
+                          _id
+                          saleDate
+                          storeLocation
+                          couponUsed
+                          purchaseMethod
+                          items {
+                            name
+                            tags
+                            price
+                            quantity
+                          }
+                          customer {
+                            gender
+                            age
+                            email
+                            satisfaction
+                          }
+                        }
+                      }
+                    </span>
+                <br>
+                Hit the <span>prettify</span> button to format the text into something more readable.
+                Now hit the play button in the middle of the screen. This query may take a little while to load as you're fetching <strong>every</strong>
+                entry in the collection (/database).
+            </p>
+            <p>
+                Now try changing the query to getSaleById. You'll need an ID to query the database with. Heres a random one <span>5bd761dcae323e45a93ccff0</span>.
+                after the word getSaleById put round parentheses and press <span>LCtrl & Space</span>. It should auto fill the word <span>id</span>.
+                Now if you put your ID in quotes after the letters <span>id</span> like this <span>id:"5bd761dcae323e45a93ccff0"</span> and hit search you should
+                get back only that result.
+            </p>
+
+        </div>
+
+        <div class="section">
+            <h3>Your Task</h3>
+            <p>Create a new query that searches the database </p>
+        </div>
+
+    </div>
+</body>
+</html>

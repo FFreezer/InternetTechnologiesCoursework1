@@ -6,10 +6,11 @@ const resolvers = require('./graphql/resolvers');
 const typeDefs = require('./graphql/typeDefs');
 
 /**
- * Normally wouldn't keep this here but its a tutorial so here we are
+ * ENTER CREDENTIALS HERE
  */
-const db_con_string = "mongodb+srv://admin:cSPAuqks86TRjBLW@honscluster.n2va8.mongodb.net/sample_supplies?retryWrites=true&w=majority"
+const { db_username, db_password, db_database } = require('./db_config.js');
 
+const db_con_string = `mongodb+srv://${db_username}:${db_password}@honscluster.n2va8.mongodb.net/${db_database}?retryWrites=true&w=majority`
 const PORT = process.env.PORT || 8080;
 
 const apollo_server = new ApolloServer({
