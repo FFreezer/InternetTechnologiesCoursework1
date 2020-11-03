@@ -5,40 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Open+Sans&display=swap" rel="stylesheet">
     <title>Document</title>
-    <style>
-        body {
-            background : rgb(200,200,200);
-            color: #222;
-        }
-
-        h1,h2,h3,h4,h5,h6 {
-            font-family: 'Open Sans', sans-serif;
-        }
-        p {
-            font-family: 'Nunito', sans-serif;
-        }
-        p > span {
-            font-family: monospace;
-            color: rgb(231, 0, 96)
-        }
-
-        a {
-            color: rgb(255, 0, 0);
-        }
-
-        .container{
-            width: 70%;
-            margin: auto;
-            background: rgba(240,240,240, 1);
-        }
-
-        .section { 
-            background: rgba(255,255,255,0.05);
-            box-shadow:1px 1px 10px rgba(0,0,0,0.8) ;
-            padding: 0.2rem 1rem;
-            margin: 1rem 0rem;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -46,41 +12,41 @@
             <h3>Download The Project Files</h3>
             <p>
                 If you dont have github installed you can download the file as a zip from the github repo. 
-                Otherwise clone <a href="" target="#">this project</a>
+                Otherwise clone <a href="https://github.com/FFreezer/InternetTechnologiesCoursework1" target="#">this project</a>
             </p>
         </div>
 
         <div class="section">
             <h3>Download Package Files</h3>
             <p>
-                Navigate using your console to the project directory and <span>run npm install</span> 
+                Navigate using your console to the project directory and <pre>run npm install</pre> 
             </p>
         </div>
         
         <div class="section">
             <h3>Database Connection Details</h3>
             <p>
-                Once you've downloaded the project open your <span>db_config.js</span> file and modify it to use these values
+                Once you've downloaded the project open your <pre>db_config.js</pre> file and modify it to use these values
                 <br />
-                <span>const db_username = "tutorialuser";</span> <br />
-                <span>const db_password = "7CQLhe6Bfx6tUCXC";</span> <br />
-                <span>const db_database = "sample_supplies";</span> <br />
+                <pre>const db_username = "tutorialuser";</pre> <br />
+                <pre>const db_password = "7CQLhe6Bfx6tUCXC";</pre> <br />
+                <pre>const db_database = "sample_supplies";</pre> <br />
             </p>
         </div>
 
         <div class="section">
             <h3>Test the application</h3>
             <p>
-                Once you've modified the above values you should be able to run <span>npm run dev</span> and the application will 
-                boot. You should see a message in your console saying <br /> <span>MongoDB Connected <br />Application is listening on port 8080. Browse to http://localhost:8080/graphql</span>
+                Once you've modified the above values you should be able to run <pre>npm run dev</pre> and the application will 
+                boot. You should see a message in your console saying <br /> <pre>MongoDB Connected <br />Application is listening on port 8080. Browse to http://localhost:8080/graphql</pre>
             </p>
             <p>
-                Open your browser and navigate to <span>localhost:8080/graphql</span>. A window should load with a panel on the left
+                Open your browser and navigate to <pre>localhost:8080/graphql</pre>. A window should load with a panel on the left
                 and a panel on the right. 
                 <br />
                 In the left hand panel copy and paste the following.
                 <br />
-                <span>
+                <pre>
                     query {
                         getAllSales {
                           _id
@@ -102,24 +68,29 @@
                           }
                         }
                       }
-                    </span>
+                    </pre>
                 <br>
-                Hit the <span>prettify</span> button to format the text into something more readable.
+                Hit the <pre>prettify</pre> button to format the text into something more readable.
                 Now hit the play button in the middle of the screen. This query may take a little while to load as you're fetching <strong>every</strong>
                 entry in the collection (/database).
             </p>
             <p>
-                Now try changing the query to getSaleById. You'll need an ID to query the database with. Heres a random one <span>5bd761dcae323e45a93ccff0</span>.
-                after the word getSaleById put round parentheses and press <span>LCtrl & Space</span>. It should auto fill the word <span>id</span>.
-                Now if you put your ID in quotes after the letters <span>id</span> like this <span>id:"5bd761dcae323e45a93ccff0"</span> and hit search you should
+                Now try changing the query to getSaleById. You'll need an ID to query the database with. Heres a random one <pre>5bd761dcae323e45a93ccff0</pre>.
+                after the word getSaleById put round parentheses and press <pre>LCtrl & Space</pre>. It should auto fill the word <pre>id</pre>.
+                Now if you put your ID in quotes after the letters <pre>id</pre> like this <pre>id:"5bd761dcae323e45a93ccff0"</pre> and hit search you should
                 get back only that result.
             </p>
 
         </div>
 
         <div class="section">
-            <h3>Your Task</h3>
-            <p>Create a new query that searches the database </p>
+            <h3>Task Specification</h3>
+            <p>Create a new query that searches the database for a record based on the customers email address. You should only have to modify the files <pre>typeDefs.js & sales.js</pre></p>
+            <p>Use the code that is already given to you to help you understand how to </p>
+        </div>
+
+        <div class="section">
+            <h3>How To Do It</h3>
         </div>
 
     </div>
