@@ -21,18 +21,27 @@ module.exports = {
             }catch(err){
                 throw new Error(err);
             }
+        },
+
+        async getSaleByCustomerEmail(parent, args, context, info){
+            const { email : email } = args;
+            const sale = await Sale.findOne( { "customer.email" : email });
+            const sale_json = sale.toJSON();
+            return {
+                ...sale_json
+            }
         }
     },
     
     Mutation : {
         async addSale(parent, {
-            inputSale : { items, storeLocation, couponUsed, purchasedMethod, customer}
+            inputSale : { items, storeLocation, couponUsed, purchaseMethod, customer}
         }, context, info){
             // addSale function body start
             const newSale = new Sale({
                 storeLocation : storeLocation,
                 couponUsed: couponUsed,
-                purchasedMethod: purchasedMethod,
+                purchaseMethod: purchaseMethod,
                 customer: customer,
                 items: items,
                 saleDate : new Date().toISOString()

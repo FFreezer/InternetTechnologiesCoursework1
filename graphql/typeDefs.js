@@ -26,11 +26,11 @@ module.exports = gql`
     }
 
     input SaleInput {
-        storeLocation: String
-        couponUsed: Boolean
-        purchaseMethod: String
-        items: [ItemInput]
-        customer: CustomerInput
+        storeLocation: String!
+        couponUsed: Boolean!
+        purchaseMethod: String!
+        items: [ItemInput]!
+        customer: CustomerInput!
     }
 
     input CustomerInput {
@@ -46,14 +46,20 @@ module.exports = gql`
         price: Float,
         quantity: Int
     }
+
+    input ItemSearchByEmailInput {
+        email: String
+    }
     
     type Query {
         getAllSales: [Sale]
         getSaleById(id: ID!) : Sale
+        getSaleByCustomerEmail(email: String) : Sale
     }
 
     type Mutation {
         addSale(inputSale: SaleInput) : Sale
+
     }
 
 `;
