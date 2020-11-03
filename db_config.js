@@ -1,6 +1,6 @@
-const db_username = "";
-const db_password = "";
-const db_database = "";
+const db_username = "tutorialuser";
+const db_password = "7CQLhe6Bfx6tUCXC";
+const db_database = "sample_supplies";
 
 module.exports = {
     db_username,

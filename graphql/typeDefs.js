@@ -54,7 +54,7 @@ module.exports = gql`
     type Query {
         getAllSales: [Sale]
         getSaleById(id: ID!) : Sale
-        getSaleByCustomerEmail(email: String) : Sale
+        getSaleByCustomerEmail(email_in: String) : Sale
     }
 
     type Mutation {

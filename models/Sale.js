@@ -24,7 +24,11 @@ const saleSchema = new Schema({
     },
     couponUsed: Boolean,
     purchaseMethod: String,
-});
+},
+{
+    collection : 'sales'
+}
+);
 
 
 module.exports = model("Sale", saleSchema);

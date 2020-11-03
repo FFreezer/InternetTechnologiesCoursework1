@@ -90,7 +90,44 @@
         </div>
 
         <div class="section">
-            <h3>How To Do It</h3>
+            <h3>Modifying Your Type Definitions</h3>
+            <p>First you're going to need to add the query we want to make to your list of queries. Do to this 
+                go into your <pre>typeDefs.js</pre> file and modify the query type near the bottom.
+                Add a new line that says 
+                <pre>getSaleByCustomerEmail(email_in: String) : Sale</pre>
+                This takes one argument of type String and will return one Sale object. You can look at what a Sale object is 
+                by scrolling to the top of the file and looking at the <pre>type Sale</pre> definition.
+            </p>
+
+            <h3>Making our resolver</h3>
+            <p>
+                Create a new resolver by going into <pre>sales.js</pre> and underneath the <pre>getSaleById</pre> function make a new funciton with
+                <pre>async function getSaleByCustomerEmail(parent, args, context, info){}</pre>
+                First we need to get the arguments we've passed to the resolver, these are stored as key value pairs in our args argument.
+                To access these we need to destructure the object. You can do this either in the function signature or in the body. We'll do it in the body.
+                <pre>
+                    getSaleByCusomterEmail(parent,args,context,info) {
+                        const { email_in : email } = args;
+                    }
+                </pre>
+                Now we can access the email address we pass into our query by accessing the email variable.
+
+                We've got a Sale model thats built using Mongoose for MongoDB. These models come with powerful search functionality.
+                We can use the model to query our database. Remember, GraphQL doesn't actually query your database, in this instance it sits in between your database driver and your application.
+            </p>
+
+            <h3>Querying Our Database</h3>
+            <p>
+                We can asynchronously query our database with Model.find() to get all results or  just Model.findOne() to get one result. We're going to use findOne here.
+                Use 
+                <pre>
+                    const sale = await Sale.findOne({ 'customer.email ' : email });
+                    const sale_json = sale.toJSON();
+                    return {
+                        ...sale_json
+                    }
+                </pre>
+            </p>
         </div>
 
     </div>
