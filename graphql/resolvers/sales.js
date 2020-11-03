@@ -24,11 +24,15 @@ module.exports = {
         },
 
         async getSaleByCustomerEmail(parent, args, context, info){
-            const { email : email } = args;
-            const sale = await Sale.findOne( { "customer.email" : email });
-            const sale_json = sale.toJSON();
-            return {
-                ...sale_json
+            try{
+                const { email : email } = args;
+                const sale = await Sale.findOne( { "customer.email" : email });
+                const sale_json = sale.toJSON();
+                return {
+                    ...sale_json
+                }
+            }catch(err){
+                throw new Error(err);
             }
         }
     },

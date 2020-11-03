@@ -73,6 +73,9 @@
                 Hit the <pre>prettify</pre> button to format the text into something more readable.
                 Now hit the play button in the middle of the screen. This query may take a little while to load as you're fetching <strong>every</strong>
                 entry in the collection (/database).
+                <br />
+                Try removing purchaseMethod and the email from the customer. Now when you send your query you'll get everything except those fields as you've not requested them.
+                <strong>Note that in this instance the server is filtering these items out for you however this can also be done through your MongoDB query meaning your server doesn't have to do the filtering as it's performed by your database.</strong>
             </p>
             <p>
                 Now try changing the query to getSaleById. You'll need an ID to query the database with. Heres a random one <pre>5bd761dcae323e45a93ccff0</pre>.
@@ -121,12 +124,39 @@
                 We can asynchronously query our database with Model.find() to get all results or  just Model.findOne() to get one result. We're going to use findOne here.
                 Use 
                 <pre>
-                    const sale = await Sale.findOne({ 'customer.email ' : email });
-                    const sale_json = sale.toJSON();
-                    return {
-                        ...sale_json
+                    try{
+                        const { email : email } = args;
+                        const sale = await Sale.findOne( { "customer.email" : email });
+                        const sale_json = sale.toJSON();
+                        return {
+                            ...sale_json
+                        }
+                    }catch(err){
+                        throw new Error(err);
                     }
                 </pre>
+                We're wrapping this in a try/catch block as theres a chance the query could fail for some reason.
+                Our first line is destructuring our args argument passed into the function.
+                The second line is sending an asynchronous query to our database. It is attempting to match the customer.email with our email query.
+                <br />
+                The third line is only required because we have an entry in the database stored as decimal128 which javascript doesn't natively support, so it is being converted into a string that we can read.
+                You could parse this into a Number type if you wanted but here we are just using String.
+                <br />
+                We are then returning our sale_json object using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="#"></a> syntax.
+            </p>
+        </div>
+
+        <div class="section">
+            <h3>Limiting Our Query</h3>
+            <p>
+                If you want to limit what the query can return then modify your type definitions.
+                Say your database stores passwords but you never want them to be visible to the client, you could make a User type that ommits the password proprety, meaning the server will
+                never return it to whichever client is making the query.
+                <br />
+                Go into your <pre>typeDefs.js</pre> file and comment out line 6, the one for saleDate.
+                Hit save. Your application should restart itself if you haven't broken anything else. Now if you make a query GraphQL will throw an error, stating that it does not recognise the type saleDate.
+                Remove saleDate from your query and hit send again and it should return everything but the saleDate.
+
             </p>
         </div>
 
