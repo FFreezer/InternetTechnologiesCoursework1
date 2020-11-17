@@ -1,53 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Open+Sans&display=swap" rel="stylesheet">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <div class="section">
-            <h3>Download The Project Files</h3>
-            <p>
-                If you dont have github installed you can download the file as a zip from the github repo. 
-                Otherwise clone <a href="https://github.com/FFreezer/InternetTechnologiesCoursework1" target="#">this project</a>
-            </p>
-        </div>
+<h1>Apollo Server</h1>
+<h2>What is Apollo Server</h2>
+<p>
+    Apollo is an open source server that features a GraphQL implementation for the NodeJS runtime environment. It is built on top of Express, a popular lightweight web server framework. Because of this Apollo can serve files over the www as well as providing
+    an API endpoint for accessing your data. Apollo Server is extremely flexible, allowing it to communicate with any API or database.
+</p>
 
-        <div class="section">
-            <h3>Download Package Files</h3>
-            <p>
-                Navigate using your console to the project directory and <pre>run npm install</pre> 
-            </p>
-        </div>
-        
-        <div class="section">
-            <h3>Database Connection Details</h3>
-            <p>
-                Once you've downloaded the project open your <pre>db_config.js</pre> file and modify it to use these values
-                <br />
-                <pre>const db_username = "tutorialuser";</pre> <br />
-                <pre>const db_password = "7CQLhe6Bfx6tUCXC";</pre> <br />
-                <pre>const db_database = "sample_supplies";</pre> <br />
-            </p>
-        </div>
+<h2> What is GraphQL? </h2>
+<p>GraphQL is a query language specification for APIs and a runtime. GraphQL uses a user defined type system, enabling developers to limit the data that is sent in response to a query. The client making the query can specify what data it wants in the response
+    and the server will respond with only that data. This reduces network traffic as data isn't being sent over 'the wire' to be discarded by the client because it doesn't need everything that was sent.
+</p>
 
-        <div class="section">
-            <h3>Test the application</h3>
-            <p>
-                Once you've modified the above values you should be able to run <pre>npm run dev</pre> and the application will 
-                boot. You should see a message in your console saying <br /> <pre>MongoDB Connected <br />Application is listening on port 8080. Browse to http://localhost:8080/graphql</pre>
-            </p>
-            <p>
-                Open your browser and navigate to <pre>localhost:8080/graphql</pre>. A window should load with a panel on the left
-                and a panel on the right. 
-                <br />
-                In the left hand panel copy and paste the following.
-                <br />
-                <pre>
-                    query {
+<h2>What GraphQL is not</h2>
+<p>GraphQL is not a database, it is a query language. Its also not tied to any database or specific storage structure, instead it is designed to sit in front of your application data storage or API, providing a smart access point that can be queried.</p>
+
+<h2>Express</h2>
+<p>GraphQL is generally run alongside <a href="https://www.npmjs.com/package/express">Express</a> through the <a href="https://www.npmjs.com/package/apollo-server-express">apollo-server-express npm package</a>, a lightweight Javascript web framework. This
+    allows it to be used as an endpoint for web applications as well as use middleware written for express like a cookie parser, middleware for cookie sessions or logging middleware like <a href="https://www.npmjs.com/package/morgan">Morgan</a>.</p>
+
+<h2>Schema</h2>
+<p>
+    Apollo Server allows you to build a schema using the GraphQL Query Language. Every graph has a schema which contains the definition of all types of data held within. This is written in a schema definition language which is human-readable, below is a simple
+    example from the official GraphQL documentiation:
+</p>
+
+<pre> 	
+        # A book has a title and an author
+          type Book {
+         title: String
+         author: Author
+        }
+        # An author has a name and a list of books
+        type Author {
+         name: String
+         books: [Book]
+        }
+      </pre>
+<p>
+    As you can see it is fairly similar to JSON. In this above example two types are defined: Book and Author, we can see that every Author has a list of Books and every Book has an Author. Types are somewhat like classes in statically typed languages such
+    as Java or C++. Each class has members with various data-types. Your schema types should be designed with how you intend for the data to be consumed, it doens't necessarily need to match your databases schema. This simplifies the frontend developers
+    life as they don't really need to know whats happening on the server, they can build their frontend based on the data provided via the API.
+</p>
+
+<h2>Queries &amp; Mutations</h2>
+<p>
+    Apollo Server is mostly used for querying and mutating the data the server is connected to, whether that be a database or a graph. Queries are for fetching data and mutations are for modifying data, think of them as GET and POST requests. Apollo Server
+    also offers subscriptions, a schema type that is intended for listening for data changes. An example of which would be if a comment on a post appeared &amp; the client wanted to listen for that change.
+</p>
+
+<h2>Authorization</h2>
+<p>
+    Apollo Server makes using authentication &amp; authorisation easy. HTTP headers can be stripped out of the request and inspected so that authentication and authorisation logic doesn't need to be placed in every resolver that requires it, although you
+    could take that approach if you so desired. The following code segment is from the <a href="https://www.apollographql.com/docs/apollo-server/security/authentication/">Apollo Documentation</a>. Although the following example is not asynchronous
+    it can be modified to be written using async await (as most of your NodeJS code <strong>should</strong> be).
+</p>
+
+<pre>    // using apollo-server 2.x
+    const { ApolloServer } = require('apollo-server');
+
+    const server = new ApolloServer({
+     typeDefs,
+     resolvers,
+     context: ({ req }) =&gt; {
+       // Note! This example uses the `req` object to access headers,
+       // but the arguments received by `context` vary by integration.
+       // This means they will vary for Express, Koa, Lambda, etc.!
+       //
+       // To find out the correct arguments for a specific integration,
+       // see the `context` option in the API reference for `apollo-server`:
+       // https://www.apollographql.com/docs/apollo-server/api/apollo-server/
+
+       // Get the user token from the headers.
+       const token = req.headers.authorization || '';
+
+       // try to retrieve a user with the token
+       const user = getUser(token);
+
+       // add the user to the context
+       return { user };
+     },
+    });
+
+    server.listen().then(({ url }) =&gt; {
+     console.log(`🚀 Server ready at ${url}`)
+    });
+    </pre>
+<h2>Tutorial</h2>
+
+<h2>This section is for you to try out</h2>
+<h3>Download The Project Files</h3>
+<p>
+    If you dont have github installed you can download the file as a zip from the github repo. Otherwise clone <a href="https://github.com/FFreezer/InternetTechnologiesCoursework1">this project</a>
+</p>
+
+<p>Note that if you get stuck the repo has a branch called solution that contains the full code to this tutorial.</p>
+
+<div class="section">
+</div>
+<h3>Download Package Files</h3>
+<p>
+    Navigate using your console to the project directory and </p>
+<pre>run npm install</pre>
+<p></p>
+
+
+<div class="section">
+    <h3>Database Connection Details</h3>
+    <p>
+        Once you've downloaded the project open your </p>
+    <pre>db_config.js</pre> file and modify it to use these values
+    <br>
+    <pre>const db_username = "tutorialuser";</pre> <br>
+    <pre>const db_password = "7CQLhe6Bfx6tUCXC";</pre> <br>
+    <pre>const db_database = "sample_supplies";</pre> <br>
+    <p></p>
+</div>
+
+<div class="section">
+    <h3>Test the application</h3>
+    <p>
+        Once you've modified the above values you should be able to run </p>
+    <pre>npm run dev</pre> and the application will boot. You should see a message in your console saying <br>
+    <pre>MongoDB Connected <br>Application is listening on port 8080. Browse to http://localhost:8080/graphql</pre>
+    <p></p>
+    <p>
+        Open your browser and navigate to </p>
+    <pre>localhost:8080/graphql</pre>. A window should load with a panel on the left and a panel on the right.
+    <br> In the left hand panel copy and paste the following.
+    <br>
+    <pre>                    query {
                         getAllSales {
                           _id
                           saleDate
@@ -69,62 +149,56 @@
                         }
                       }
                     </pre>
-                <br>
-                Hit the <pre>prettify</pre> button to format the text into something more readable.
-                Now hit the play button in the middle of the screen. This query may take a little while to load as you're fetching <strong>every</strong>
-                entry in the collection (/database).
-                <br />
-                Try removing purchaseMethod and the email from the customer. Now when you send your query you'll get everything except those fields as you've not requested them.
-                <strong>Note that in this instance the server is filtering these items out for you however this can also be done through your MongoDB query meaning your server doesn't have to do the filtering as it's performed by your database.</strong>
-            </p>
-            <p>
-                Now try changing the query to getSaleById. You'll need an ID to query the database with. Heres a random one <pre>5bd761dcae323e45a93ccff0</pre>.
-                after the word getSaleById put round parentheses and press <pre>LCtrl & Space</pre>. It should auto fill the word <pre>id</pre>.
-                Now if you put your ID in quotes after the letters <pre>id</pre> like this <pre>id:"5bd761dcae323e45a93ccff0"</pre> and hit search you should
-                get back only that result.
-            </p>
+    <br> Hit the
+    <pre>prettify</pre> button to format the text into something more readable. Now hit the play button in the middle of the screen. This query may take a little while to load as you're fetching <strong>every</strong> entry in the collection (/database).
+    <br> Try removing purchaseMethod and the email from the customer. Now when you send your query you'll get everything except those fields as you've not requested them.
+    <strong>Note that in this instance the server is filtering these items out for you however this can also be done through your MongoDB query meaning your server doesn't have to do the filtering as it's performed by your database.</strong>
+    <p></p>
+    <p>
+        Now try changing the query to getSaleById. You'll need an ID to query the database with. Heres a random one </p>
+    <pre>5bd761dcae323e45a93ccff0</pre>. after the word getSaleById put round parentheses and press
+    <pre>LCtrl &amp; Space</pre>. It should auto fill the word
+    <pre>id</pre>. Now if you put your ID in quotes after the letters
+    <pre>id</pre> like this
+    <pre>id:"5bd761dcae323e45a93ccff0"</pre> and hit search you should get back only that result.
+    <p></p>
 
-        </div>
+</div>
 
-        <div class="section">
-            <h3>Task Specification</h3>
-            <p>Create a new query that searches the database for a record based on the customers email address. You should only have to modify the files <pre>typeDefs.js & sales.js</pre></p>
-            <p>Use the code that is already given to you to help you understand how to </p>
-        </div>
+<div class="section">
+    <h3>Task Specification</h3>
+    <p>Create a new query that searches the database for a record based on the customers email address. You should only have to modify the files </p>
+    <pre>typeDefs.js &amp; sales.js</pre>
+    <p></p>
+    <p>Use the code that is already given to you to help you understand how to </p>
+</div>
 
-        <div class="section">
-            <h3>Modifying Your Type Definitions</h3>
-            <p>First you're going to need to add the query we want to make to your list of queries. Do to this 
-                go into your <pre>typeDefs.js</pre> file and modify the query type near the bottom.
-                Add a new line that says 
-                <pre>getSaleByCustomerEmail(email_in: String) : Sale</pre>
-                This takes one argument of type String and will return one Sale object. You can look at what a Sale object is 
-                by scrolling to the top of the file and looking at the <pre>type Sale</pre> definition.
-            </p>
-
-            <h3>Making our resolver</h3>
-            <p>
-                Create a new resolver by going into <pre>sales.js</pre> and underneath the <pre>getSaleById</pre> function make a new funciton with
-                <pre>async function getSaleByCustomerEmail(parent, args, context, info){}</pre>
-                First we need to get the arguments we've passed to the resolver, these are stored as key value pairs in our args argument.
-                To access these we need to destructure the object. You can do this either in the function signature or in the body. We'll do it in the body.
-                <pre>
-                    getSaleByCusomterEmail(parent,args,context,info) {
+<div class="section">
+    <h3>Modifying Your Type Definitions</h3>
+    <p>First you're going to need to add the query we want to make to your list of queries. Do to this go into your </p>
+    <pre>typeDefs.js</pre> file and modify the query type near the bottom. Add a new line that says
+    <pre>getSaleByCustomerEmail(email_in: String) : Sale</pre> This takes one argument of type String and will return one Sale object. You can look at what a Sale object is by scrolling to the top of the file and looking at the
+    <pre>type Sale</pre> definition.
+    <p></p>
+    <h3>Making our resolver</h3>
+    <p>
+        Create a new resolver by going into </p>
+    <pre>sales.js</pre> and underneath the
+    <pre>getSaleById</pre> function make a new funciton with
+    <pre>async function getSaleByCustomerEmail(parent, args, context, info){}</pre> First we need to get the arguments we've passed to the resolver, these are stored as key value pairs in our args argument. To access these we need to destructure the object. You can do this either in the function signature or in the body. We'll do
+    it in the body.
+    <pre>                    getSaleByCusomterEmail(parent,args,context,info) {
                         const { email_in : email } = args;
                     }
-                </pre>
-                Now we can access the email address we pass into our query by accessing the email variable.
+                </pre> Now we can access the email address we pass into our query by accessing the email variable. We've got a Sale model thats built using Mongoose for MongoDB. These models come with powerful search functionality. We can use the model to query our database.
+    Remember, GraphQL doesn't actually query your database, in this instance it sits in between your database driver and your application.
+    <p></p>
 
-                We've got a Sale model thats built using Mongoose for MongoDB. These models come with powerful search functionality.
-                We can use the model to query our database. Remember, GraphQL doesn't actually query your database, in this instance it sits in between your database driver and your application.
-            </p>
-
-            <h3>Querying Our Database</h3>
-            <p>
-                We can asynchronously query our database with Model.find() to get all results or  just Model.findOne() to get one result. We're going to use findOne here.
-                Use 
-                <pre>
-                    try{
+    <h3>Querying Our Database</h3>
+    <p>
+        We can asynchronously query our database with Model.find() to get all results or just Model.findOne() to get one result. We're going to use findOne here. Use
+    </p>
+    <pre>                    try{
                         const { email : email } = args;
                         const sale = await Sale.findOne( { "customer.email" : email });
                         const sale_json = sale.toJSON();
@@ -134,32 +208,22 @@
                     }catch(err){
                         throw new Error(err);
                     }
-                </pre>
-                We're wrapping this in a try/catch block as theres a chance the query could fail for some reason.
-                Our first line is destructuring our args argument passed into the function.
-                The second line is sending an asynchronous query to our database. It is attempting to match the customer.email with our email query.
-                <br />
-                The third line is only required because we have an entry in the database stored as decimal128 which javascript doesn't natively support, so it is being converted into a string that we can read.
-                You could parse this into a Number type if you wanted but here we are just using String.
-                <br />
-                We are then returning our sale_json object using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="#"></a> syntax.
-            </p>
-        </div>
+                </pre> We're wrapping this in a try/catch block as theres a chance the query could fail for some reason. Our first line is destructuring our args argument passed into the function. The second line is sending an asynchronous query to our database. It is
+    attempting to match the customer.email with our email query.
+    <br> The third line is only required because we have an entry in the database stored as decimal128 which javascript doesn't natively support, so it is being converted into a string that we can read. You could parse this into a Number type if you wanted
+    but here we are just using String.
+    <br> We are then returning our sale_json object using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax"></a> syntax.
+    <p></p>
+</div>
 
-        <div class="section">
-            <h3>Limiting Our Query</h3>
-            <p>
-                If you want to limit what the query can return then modify your type definitions.
-                Say your database stores passwords but you never want them to be visible to the client, you could make a User type that ommits the password proprety, meaning the server will
-                never return it to whichever client is making the query.
-                <br />
-                Go into your <pre>typeDefs.js</pre> file and comment out line 6, the one for saleDate.
-                Hit save. Your application should restart itself if you haven't broken anything else. Now if you make a query GraphQL will throw an error, stating that it does not recognise the type saleDate.
-                Remove saleDate from your query and hit send again and it should return everything but the saleDate.
-
-            </p>
-        </div>
-
-    </div>
-</body>
-</html>
+<div class="section">
+    <h3>Limiting Our Query</h3>
+    <p>
+        If you want to limit what the query can return then modify your type definitions. Say your database stores passwords but you never want them to be visible to the client, you could make a User type that ommits the password proprety, meaning the server
+        will never return it to whichever client is making the query.
+        <br> Go into your
+    </p>
+    <pre>typeDefs.js</pre> file and comment out line 6, the one for saleDate. Hit save. Your application should restart itself if you haven't broken anything else. Now if you make a query GraphQL will throw an error, stating that it does not recognise the type saleDate. Remove
+    saleDate from your query and hit send again and it should return everything but the saleDate.
+    <p></p>
+</div>

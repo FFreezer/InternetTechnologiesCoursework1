@@ -1,22 +1,16 @@
 const express = require('express');
-const { ApolloServer , gql } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 
 const resolvers = require('./graphql/resolvers');
 const typeDefs = require('./graphql/typeDefs');
 
-/**
- * ENTER CREDENTIALS HERE
- */
 const { db_username, db_password, db_database } = require('./db_config.js');
 
 const db_con_string = `mongodb+srv://${db_username}:${db_password}@honscluster.n2va8.mongodb.net/${db_database}?retryWrites=true&w=majority`
 const PORT = process.env.PORT || 8080;
 
-const apollo_server = new ApolloServer({
-    typeDefs,
-    resolvers
-});
+const apollo_server = new ApolloServer({ typeDefs, resolvers });
 
 const app = express();
 apollo_server.applyMiddleware({ app });
